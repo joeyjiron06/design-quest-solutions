@@ -1,22 +1,8 @@
-## Development
+## Design Question Solutions
 
-When starting the dev server, use background mode:
+Read [About.md](./docs/About.md) to understand the business that this website is for.
 
-```
-astro dev --background
-```
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
-## Documentation
-
-Full documentation: https://docs.astro.build
-
-Consult these guides before working on related tasks:
-
-- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
-- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
-- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
-- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
-- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+Always use tailwind for styling unless custom CSS is really needed for things like custom animations.
+Read the [Theme](./src/global.css) css file and only use values from the theme, don't ever add custom colors or others that are outside of the theme.
