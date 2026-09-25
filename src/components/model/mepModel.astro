@@ -1,0 +1,139 @@
+---
+/**
+ * Canvas island for the building model.
+ *
+ * Three.js, its post-processing addons and GSAP arrive through a dynamic
+ * import fired by an IntersectionObserver, so roughly 185 KB gzipped of 3D
+ * code stays off the critical render path. The hero sits above the fold, so
+ * in practice that import starts straight away; the point of the split is
+ * that it does not block first paint.
+ *
+ * The wrapper has no size of its own. Pass sizing utilities through `class`,
+ * and make sure the height resolves to something.
+ *
+ * The canvas is absolutely positioned on purpose. An in-flow canvas with
+ * `height: 100%` inside an auto-height parent falls back to its intrinsic 2:1
+ * ratio, and because the renderer writes the width and height attributes from
+ * the measured size, that wrong ratio then locks itself in. Anchoring to the
+ * wrapper's padding box gives the height something definite to resolve against.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class:list={["relative", className]} data-mep-model>
+  <!-- Decorative. The surrounding copy carries the meaning. -->
+  <canvas class="absolute inset-0 block h-full w-full" aria-hidden="true"
+  ></canvas>
+
+  <!--
+    Shown only when the model cannot run: no WebGL, a lost context, or a
+    failed chunk. Hidden rather than removed so the reveal is one attribute.
+    Its wording says what the visual would have been, so the space still
+    carries meaning instead of reading as a broken image.
+  -->
+  <div
+    data-mep-fallback
+    hidden
+    class="fallback absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center [&[hidden]]:hidden"
+  >
+    <span
+      class="text-muted-foreground font-mono text-[9px] tracking-[0.28em] uppercase"
+    >
+      Coordination Model
+    </span>
+    <p class="max-w-xs font-serif text-[13px] leading-snug italic text-balance">
+      An animated HVAC, plumbing and fire protection model sits here. Your
+      browser cannot display 3D graphics, so here is the short version: we
+      model every system in one file and find the clashes before the trades do.
+    </p>
+    <span class="bg-border block h-px w-20"></span>
+  </div>
+</div>
+
+<style>
+  /* Custom CSS is warranted: a repeating hatch has no Tailwind utility.
+
+     It is on the fallback only, never on the wrapper. The canvas renders with
+     a transparent clear colour so the sheet behind it shows through, which
+     means anything painted on the wrapper would sit behind the building for
+     good rather than only while it loads. */
+  .fallback {
+    background-color: var(--background);
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent 0 13px,
+      color-mix(in oklch, var(--foreground) 6%, transparent) 13px 14px
+    );
+  }
+</style>
+
+<script>
+  // Type-only, so it is erased at build and pulls in no runtime code.
+  import type { MepModel } from "./mepScene";
+
+  const instances: MepModel[] = [];
+
+  const loader = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        loader.unobserve(entry.target);
+        void mount(entry.target as HTMLElement);
+      }
+    },
+    { rootMargin: "200px" },
+  );
+
+  function showFallback(root: HTMLElement) {
+    root.querySelector("canvas")?.remove();
+    root.querySelector("[data-mep-fallback]")?.removeAttribute("hidden");
+  }
+
+  async function mount(root: HTMLElement) {
+    const canvas = root.querySelector("canvas");
+    if (!canvas) return;
+
+    try {
+      const { mountMepModel } = await import("./mepScene");
+      const model = mountMepModel(canvas);
+      // Null means no WebGL context. Say so rather than leave a blank panel.
+      if (!model) {
+        showFallback(root);
+        return;
+      }
+      instances.push(model);
+
+      // A context loss is unrecoverable here, because every buffer, texture
+      // and shader went with it. Fall back rather than hold a dead canvas.
+      canvas.addEventListener(
+        "webglcontextlost",
+        () => {
+          model.dispose();
+          showFallback(root);
+        },
+        { once: true },
+      );
+    } catch {
+      // The chunk failed to load or the scene threw while building.
+      showFallback(root);
+    }
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-mep-model]")) {
+    loader.observe(root);
+  }
+
+  // Astro's client router swaps the DOM out from under us. There is no
+  // <ClientRouter /> in this project today, so this never fires; it is kept
+  // because without it the WebGL context, its buffers and the bloom render
+  // targets would leak on every navigation the day one is added.
+  document.addEventListener("astro:before-swap", () => {
+    loader.disconnect();
+    for (const model of instances) model.dispose();
+    instances.length = 0;
+  });
+</script>

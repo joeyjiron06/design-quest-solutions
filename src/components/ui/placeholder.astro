@@ -1,0 +1,39 @@
+---
+/**
+ * Hatched stand-in for artwork that does not exist yet.
+ * Labelled bottom-left, the way a view title is called out on a drawing.
+ */
+interface Props {
+  label: string;
+  note: string;
+  class?: string;
+}
+
+const { label, note, class: className = "" } = Astro.props;
+---
+
+<div class:list={["placeholder relative", className]}>
+  <div class="absolute bottom-5 left-5 lg:bottom-7 lg:left-8">
+    <span
+      class="text-muted-foreground font-mono text-[9px] tracking-[0.28em] uppercase"
+      >{label}</span
+    >
+    <div class="mt-1.5 max-w-xs font-serif text-[13px] leading-snug italic">
+      {note}
+    </div>
+    <span class="bg-border mt-2.5 block h-px w-28"></span>
+  </div>
+</div>
+
+<style>
+  /* Custom CSS is warranted here: a repeating hatch has no Tailwind utility.
+     It reads off the active palette, so it works in both light and dark. */
+  .placeholder {
+    background-color: var(--muted);
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent 0 13px,
+      color-mix(in oklch, var(--foreground) 8%, transparent) 13px 14px
+    );
+  }
+</style>

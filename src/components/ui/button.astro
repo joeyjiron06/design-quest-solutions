@@ -1,0 +1,38 @@
+---
+/**
+ * The only button on the site. Centralised so the CTA wording and shape stay
+ * identical in all four places it appears (copy doc §13, "CTA count").
+ */
+interface Props {
+  href: string;
+  variant?: "primary" | "secondary";
+  size?: "sm" | "md";
+  class?: string;
+}
+
+const {
+  href,
+  variant = "primary",
+  size = "md",
+  class: className = "",
+} = Astro.props;
+
+const base =
+  "inline-flex items-center justify-center text-center uppercase transition-colors";
+
+const variants = {
+  primary:
+    "bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground",
+  secondary:
+    "border border-border text-foreground hover:border-accent hover:text-accent",
+};
+
+const sizes = {
+  md: "px-10 py-4.5 text-[11px] tracking-[0.22em]",
+  sm: "px-3.5 py-2 text-[9px] tracking-[0.16em] lg:px-5 lg:py-2.5 lg:text-[10px] lg:tracking-[0.2em]",
+};
+---
+
+<a href={href} class:list={[base, variants[variant], sizes[size], className]}>
+  <slot />
+</a>

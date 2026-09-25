@@ -1,0 +1,67 @@
+---
+/**
+ * Hero — copy doc §2, split vertically.
+ *
+ * Copy on the left, drawing area filling the right column. The title block
+ * sits over the bottom-right of the drawing, which is where a real sheet puts
+ * it.
+ */
+import { site } from "../../data/site";
+import Sheet from "../layout/sheet.astro";
+import Button from "../ui/button.astro";
+import MepModel from "../model/mepModel.astro";
+import TitleBlock from "../ui/titleBlock.astro";
+---
+
+<Sheet id="top">
+  <div class="grid flex-1 lg:grid-cols-[52fr_48fr]">
+    <div
+      class="flex flex-col justify-center px-5 py-14 lg:px-10 lg:py-14 xl:px-14"
+    >
+      <div class="flex items-center gap-4">
+        <span class="bg-accent h-px w-10"></span>
+        <span
+          class="text-accent font-mono text-[9px] tracking-[0.3em] uppercase"
+        >
+          HVAC &amp; Plumbing Revit Modeling
+        </span>
+      </div>
+
+      <h1
+        class="mt-8 font-serif text-[clamp(2.4rem,4.2vw,4.25rem)] leading-[0.98] tracking-[-0.015em]"
+      >
+        Revit Models That<br />
+        <span class="italic">Find Problems Early</span>
+      </h1>
+
+      <p class="text-muted-foreground mt-8 max-w-lg text-[15px] leading-8">
+        Design Quest Solutions turns your engineer's markups into coordinated
+        HVAC and plumbing Revit models for commercial buildings, and flags the
+        code and clash issues while they're still cheap to change.
+      </p>
+
+      <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+        <Button href={site.quoteHref}>{site.cta.primary}</Button>
+        <Button href={site.cta.secondaryHref} variant="secondary">
+          {site.cta.secondary}
+        </Button>
+      </div>
+
+      <p class="text-muted-foreground mt-9 text-[12.5px] tracking-[0.06em]">
+        Los Angeles County specialists, working across Southern California.
+      </p>
+    </div>
+
+    <div class="border-border/40 relative border-t lg:border-t-0 lg:border-l">
+      {/*
+        Taller than the placeholder it replaced. The model is eleven storeys,
+        so a short wide box makes the camera pull back until the building is a
+        smudge; height is what it needs, and it is the one thing a phone has
+        least of. The title block overlapping the bottom-right on lg is the
+        intended drawing-sheet look, not an accident.
+      */}
+      <MepModel class="h-[400px] sm:h-[460px] lg:h-full lg:min-h-[520px]" />
+      <TitleBlock width="lg:w-[24rem]" />
+    </div>
+  </div>
+</Sheet>

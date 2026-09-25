@@ -1,44 +1,55 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
+/* Matches the element itself as well as its descendants, so a section can opt
+   into the dark palette with class="dark" and still use dark: utilities. */
+@custom-variant dark (&:is(.dark, .dark *));
 
+/* ---------------------------------------------------------------------------
+   Light palette — warm paper and wine.
+   Used by every section except the hero.
+   Contrast (WCAG AA needs 4.5): body 14.3, muted 5.7, primary 11.1, accent 5.1
+--------------------------------------------------------------------------- */
 :root {
-  --background: oklch(0.9892 0.0053 286.3028);
-  --foreground: oklch(0.2257 0.0194 280.2492);
-  --card: oklch(0.9892 0.0053 286.3028);
-  --card-foreground: oklch(0.2257 0.0194 280.2492);
-  --popover: oklch(1.0000 0 0);
-  --popover-foreground: oklch(0.2257 0.0194 280.2492);
-  --primary: oklch(0.6217 0.1799 287.7754);
-  --primary-foreground: oklch(1.0000 0 0);
-  --secondary: oklch(0.9570 0.0187 289.3286);
-  --secondary-foreground: oklch(0.3569 0.0813 288.2584);
-  --muted: oklch(0.9601 0.0093 286.2229);
-  --muted-foreground: oklch(0.5100 0.0425 284.7922);
-  --accent: oklch(0.9570 0.0187 289.3286);
-  --accent-foreground: oklch(0.4619 0.2173 279.9839);
-  --destructive: oklch(0.6430 0.1925 24.3201);
-  --destructive-foreground: oklch(1.0000 0 0);
-  --border: oklch(0.9175 0.0216 285.9662);
-  --input: oklch(0.8660 0.0371 285.5991);
-  --ring: oklch(0.6217 0.1799 287.7754);
-  --chart-1: oklch(0.6217 0.1799 287.7754);
-  --chart-2: oklch(0.7716 0.1036 291.3083);
-  --chart-3: oklch(0.3569 0.0813 288.2584);
-  --chart-4: oklch(0.8740 0.0537 291.1256);
-  --chart-5: oklch(0.5413 0.1805 285.7967);
-  --sidebar: oklch(0.9811 0.0093 286.2277);
-  --sidebar-foreground: oklch(0.3755 0.0323 284.7377);
-  --sidebar-primary: oklch(0.6217 0.1799 287.7754);
-  --sidebar-primary-foreground: oklch(1.0000 0 0);
-  --sidebar-accent: oklch(0.9570 0.0187 289.3286);
-  --sidebar-accent-foreground: oklch(0.4619 0.2173 279.9839);
-  --sidebar-border: oklch(0.9430 0.0134 286.1402);
-  --sidebar-ring: oklch(0.6217 0.1799 287.7754);
-  --font-sans: Inter, sans-serif;
-  --font-serif: Merriweather, serif;
-  --font-mono: JetBrains Mono, monospace;
-  --radius: 0.5rem;
+  --background: oklch(0.9686 0.0071 80);
+  --foreground: oklch(0.2600 0.0150 30);
+  --card: oklch(0.9480 0.0090 80);
+  --card-foreground: oklch(0.2600 0.0150 30);
+  --popover: oklch(0.9800 0.0050 80);
+  --popover-foreground: oklch(0.2600 0.0150 30);
+  --primary: oklch(0.3400 0.0850 6);
+  --primary-foreground: oklch(0.9686 0.0071 80);
+  --secondary: oklch(0.9270 0.0110 78);
+  --secondary-foreground: oklch(0.3400 0.0850 6);
+  --muted: oklch(0.9270 0.0110 78);
+  --muted-foreground: oklch(0.4950 0.0220 28);
+  --accent: oklch(0.5200 0.0900 66);
+  --accent-foreground: oklch(0.9686 0.0071 80);
+  --destructive: oklch(0.5100 0.1750 29);
+  --destructive-foreground: oklch(0.9800 0.0050 80);
+  --border: oklch(0.8620 0.0160 45);
+  --input: oklch(0.8200 0.0180 45);
+  --ring: oklch(0.3400 0.0850 6);
+  --chart-1: oklch(0.3400 0.0850 6);
+  --chart-2: oklch(0.5200 0.0900 66);
+  --chart-3: oklch(0.4600 0.0700 20);
+  --chart-4: oklch(0.6800 0.0700 70);
+  --chart-5: oklch(0.2608 0.0500 4.7);
+  --sidebar: oklch(0.9480 0.0090 80);
+  --sidebar-foreground: oklch(0.2600 0.0150 30);
+  --sidebar-primary: oklch(0.3400 0.0850 6);
+  --sidebar-primary-foreground: oklch(0.9686 0.0071 80);
+  --sidebar-accent: oklch(0.9270 0.0110 78);
+  --sidebar-accent-foreground: oklch(0.3400 0.0850 6);
+  --sidebar-border: oklch(0.8620 0.0160 45);
+  --sidebar-ring: oklch(0.3400 0.0850 6);
+
+  /* Family names come from the @fontsource-variable packages. The word
+     "Variable" is part of the registered family and cannot be dropped. */
+  --font-sans: "Inter Variable", Inter, system-ui, sans-serif;
+  --font-serif: "Playfair Display Variable", "Playfair Display", Georgia, serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  --radius: 0rem;
   --shadow-x: 0px;
   --shadow-y: 4px;
   --shadow-blur: 10px;
@@ -53,53 +64,52 @@
   --shadow-lg: 0px 4px 10px 0px hsl(0 0% 0% / 0.05), 0px 4px 6px -1px hsl(0 0% 0% / 0.05);
   --shadow-xl: 0px 4px 10px 0px hsl(0 0% 0% / 0.05), 0px 8px 10px -1px hsl(0 0% 0% / 0.05);
   --shadow-2xl: 0px 4px 10px 0px hsl(0 0% 0% / 0.13);
-  --tracking-normal: -0.01em;
+  --tracking-normal: 0em;
   --spacing: 0.25rem;
 }
 
+/* ---------------------------------------------------------------------------
+   Dark palette — oxblood #381921, cream and brass.
+   Currently applied per section with class="dark", not to the whole document.
+   Contrast: body 13.1, muted 7.4, accent 7.9
+--------------------------------------------------------------------------- */
 .dark {
-  --background: oklch(0.1503 0.0171 289.8934);
-  --foreground: oklch(0.9284 0.0161 286.0812);
-  --card: oklch(0.1503 0.0171 289.8934);
-  --card-foreground: oklch(0.9284 0.0161 286.0812);
-  --popover: oklch(0.1941 0.0240 287.7536);
-  --popover-foreground: oklch(0.9284 0.0161 286.0812);
-  --primary: oklch(0.6217 0.1799 287.7754);
-  --primary-foreground: oklch(1.0000 0 0);
-  --secondary: oklch(0.2354 0.0399 287.2762);
-  --secondary-foreground: oklch(0.9284 0.0161 286.0812);
-  --muted: oklch(0.2047 0.0296 286.5224);
-  --muted-foreground: oklch(0.6907 0.0467 285.1130);
-  --accent: oklch(0.2739 0.0616 285.5915);
-  --accent-foreground: oklch(0.7716 0.1036 291.3083);
-  --destructive: oklch(0.3997 0.1352 25.8101);
-  --destructive-foreground: oklch(1.0000 0 0);
-  --border: oklch(0.2587 0.0372 285.7691);
-  --input: oklch(0.3015 0.0518 286.0003);
-  --ring: oklch(0.6217 0.1799 287.7754);
-  --chart-1: oklch(0.6217 0.1799 287.7754);
-  --chart-2: oklch(0.5413 0.1805 285.7967);
-  --chart-3: oklch(0.7716 0.1036 291.3083);
-  --chart-4: oklch(0.3569 0.0813 288.2584);
-  --chart-5: oklch(0.4539 0.1474 285.6505);
-  --sidebar: oklch(0.1616 0.0230 287.6930);
-  --sidebar-foreground: oklch(0.8147 0.0307 285.6989);
-  --sidebar-primary: oklch(0.6217 0.1799 287.7754);
-  --sidebar-primary-foreground: oklch(1.0000 0 0);
-  --sidebar-accent: oklch(0.2354 0.0399 287.2762);
-  --sidebar-accent-foreground: oklch(0.9284 0.0161 286.0812);
-  --sidebar-border: oklch(0.2587 0.0372 285.7691);
-  --sidebar-ring: oklch(0.6217 0.1799 287.7754);
-  --font-sans: Inter, sans-serif;
-  --font-serif: Merriweather, serif;
-  --font-mono: JetBrains Mono, monospace;
-  --radius: 0.5rem;
-  --shadow-x: 0px;
+  --background: oklch(0.2608 0.0500 4.7);
+  --foreground: oklch(0.9380 0.0120 72);
+  --card: oklch(0.3050 0.0480 6);
+  --card-foreground: oklch(0.9380 0.0120 72);
+  --popover: oklch(0.3050 0.0480 6);
+  --popover-foreground: oklch(0.9380 0.0120 72);
+  --primary: oklch(0.9380 0.0120 72);
+  --primary-foreground: oklch(0.2608 0.0500 4.7);
+  --secondary: oklch(0.3220 0.0450 6);
+  --secondary-foreground: oklch(0.9380 0.0120 72);
+  --muted: oklch(0.3220 0.0450 6);
+  --muted-foreground: oklch(0.7650 0.0240 42);
+  --accent: oklch(0.7850 0.0850 72);
+  --accent-foreground: oklch(0.2608 0.0500 4.7);
+  --destructive: oklch(0.6000 0.1650 29);
+  --destructive-foreground: oklch(0.9800 0.0050 80);
+  --border: oklch(0.4700 0.0400 12);
+  --input: oklch(0.4700 0.0400 12);
+  --ring: oklch(0.7850 0.0850 72);
+  --chart-1: oklch(0.7850 0.0850 72);
+  --chart-2: oklch(0.9380 0.0120 72);
+  --chart-3: oklch(0.6500 0.0700 30);
+  --chart-4: oklch(0.5000 0.0600 15);
+  --chart-5: oklch(0.3800 0.0550 8);
+  --sidebar: oklch(0.3050 0.0480 6);
+  --sidebar-foreground: oklch(0.9380 0.0120 72);
+  --sidebar-primary: oklch(0.7850 0.0850 72);
+  --sidebar-primary-foreground: oklch(0.2608 0.0500 4.7);
+  --sidebar-accent: oklch(0.3220 0.0450 6);
+  --sidebar-accent-foreground: oklch(0.9380 0.0120 72);
+  --sidebar-border: oklch(0.4700 0.0400 12);
+  --sidebar-ring: oklch(0.7850 0.0850 72);
+
   --shadow-y: 8px;
   --shadow-blur: 20px;
-  --shadow-spread: 0px;
   --shadow-opacity: 0.4;
-  --shadow-color: #000000;
   --shadow-2xs: 0px 8px 20px 0px hsl(0 0% 0% / 0.20);
   --shadow-xs: 0px 8px 20px 0px hsl(0 0% 0% / 0.20);
   --shadow-sm: 0px 8px 20px 0px hsl(0 0% 0% / 0.40), 0px 1px 2px -1px hsl(0 0% 0% / 0.40);
@@ -173,6 +183,10 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {

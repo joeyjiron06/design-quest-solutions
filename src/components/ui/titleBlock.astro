@@ -1,0 +1,72 @@
+---
+/**
+ * Drawing title block. Sits in the bottom-right corner of the hero sheet on
+ * large screens, and stacks full width below the drawing area on small ones.
+ *
+ * It carries the §3 credentials, so the hero needs no separate fact strip.
+ */
+import { site } from "../../data/site";
+
+interface Props {
+  /**
+   * Width at lg and above. Passed as a prop rather than merged into `class`,
+   * because two `lg:w-*` utilities on one element resolve by CSS source order,
+   * not by the order they appear in the class attribute.
+   */
+  width?: string;
+  class?: string;
+}
+
+const { width = "lg:w-[27rem]", class: className = "" } = Astro.props;
+---
+
+<div
+  class:list={[
+    "border-border/70 bg-background border-t lg:absolute lg:right-0 lg:bottom-0 lg:border-l",
+    width,
+    className,
+  ]}
+>
+  <div class="border-border/50 border-b px-4 py-2">
+    <div
+      class="text-muted-foreground font-mono text-[8px] tracking-[0.22em] uppercase"
+    >
+      Firm
+    </div>
+    <div class="mt-1 font-serif text-[15px] tracking-[0.04em]">
+      {site.brand}
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2">
+    {
+      site.titleBlock.map((row, i) => (
+        <div
+          class:list={[
+            "border-border/50 border-b px-4 py-2",
+            i % 2 === 0 && "border-r",
+          ]}
+        >
+          <div class="text-muted-foreground font-mono text-[8px] tracking-[0.22em] uppercase">
+            {row.label}
+          </div>
+          <div class="mt-1 text-[12px] leading-tight">{row.value}</div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="px-4 py-2">
+    <div
+      class="text-muted-foreground font-mono text-[8px] tracking-[0.22em] uppercase"
+    >
+      Contact
+    </div>
+    <a
+      href={site.quoteHref}
+      class="hover:text-accent mt-1 block font-mono text-[12px] transition-colors"
+    >
+      {site.email}
+    </a>
+  </div>
+</div>

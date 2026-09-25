@@ -1,0 +1,53 @@
+---
+/**
+ * Navigation, drawn inside the hero sheet rather than above it.
+ *
+ * NOTE: copy doc §1 asks for a sticky full-width header. That cannot be this
+ * element, because it lives inside the drawing frame. A separate sticky bar
+ * that appears after the hero is the likely answer, once more sections exist.
+ */
+import { site } from "../../data/site";
+import Button from "../ui/button.astro";
+---
+
+<header class="border-border/40 border-b">
+  <div
+    class="grid grid-cols-[1fr_auto_1fr] items-center gap-5 px-5 py-4 lg:px-8"
+  >
+    <nav class="hidden items-center gap-8 lg:flex">
+      {
+        site.nav.slice(0, 2).map((item) => (
+          <a
+            href={item.href}
+            class="text-muted-foreground hover:text-accent font-mono text-[10px] tracking-[0.2em] uppercase transition-colors"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a
+      href="#top"
+      class="text-center font-serif text-[11px] tracking-[0.25em] uppercase whitespace-nowrap lg:text-[13px] lg:tracking-[0.4em]"
+    >
+      {site.brand}
+    </a>
+
+    <div class="flex items-center justify-end gap-8">
+      {
+        site.nav.slice(2).map((item) => (
+          <a
+            href={item.href}
+            class="text-muted-foreground hover:text-accent hidden font-mono text-[10px] tracking-[0.2em] uppercase transition-colors lg:inline"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <Button href={site.quoteHref} variant="secondary" size="sm" class="font-mono">
+        {site.cta.primary}
+      </Button>
+    </div>
+  </div>
+</header>
