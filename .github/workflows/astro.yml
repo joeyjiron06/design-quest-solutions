@@ -1,0 +1,89 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run
+# in-progress and latest queued. However, do NOT cancel in-progress runs as we
+# want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  BUILD_PATH: "." # default value when not using subfolders
+  # Must satisfy package.json `engines.node` (>=22.12.0), which Astro 7 needs.
+  NODE_VERSION: "22"
+  # Must be >=10 to read lockfileVersion 9 and the `allowBuilds` key in
+  # pnpm-workspace.yaml. Pinned to the version used locally so CI resolves
+  # dependencies identically.
+  PNPM_VERSION: "11.1.2"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Before setup-node, per pnpm's documented order.
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+          cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Fails loudly if pnpm-lock.yaml drifts from package.json, rather than
+      # silently deploying a different dependency tree than the one tested.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v6
+
+      # `--site` / `--base` are Astro global flags that override
+      # astro.config.mjs, so the build follows wherever Pages actually serves
+      # this repo even if it is renamed or moved to a custom domain.
+      - name: Build with Astro
+        run: |
+          pnpm run build \
+            --site "${{ steps.pages.outputs.origin }}" \
+            --base "${{ steps.pages.outputs.base_path }}"
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ${{ env.BUILD_PATH }}/dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
