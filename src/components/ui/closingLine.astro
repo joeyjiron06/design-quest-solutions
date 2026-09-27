@@ -1,0 +1,22 @@
+---
+/**
+ * The quiet line that closes a section. Small mono caps, centred, muted.
+ *
+ * Used for the two guardrail statements the copy doc asks to be present but
+ * never loud: §4's pivot into How It Works and §5's liability boundary.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<p
+  class:list={[
+    "text-muted-foreground mt-14 text-center font-mono text-[11px] leading-6 tracking-[0.18em] uppercase lg:mt-16",
+    className,
+  ]}
+>
+  <slot />
+</p>

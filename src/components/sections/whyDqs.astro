@@ -1,0 +1,99 @@
+---
+/**
+ * Why DQS — copy doc §7. The comparison section.
+ *
+ * It answers "why not the firm we used last time" without naming anyone.
+ * Pillar 1 leads and carries the most weight; the copy doc is explicit that
+ * this section earns its place only as a comparison, and should be cut if it
+ * reads as repetition once designed.
+ *
+ * TODO [VERIFY] — Pillar 2's headline, "since Revit was new". Revit shipped in
+ * 2000. If either owner adopted it mid-2000s this overstates, and Branding.md
+ * §6 only approves "early adopters of Revit" with no date attached. The
+ * approved fallback headline is "HVAC and plumbing, all day, for 25 years."
+ */
+import { site } from "../../data/site";
+import Section from "../layout/section.astro";
+import SectionHeading from "../ui/sectionHeading.astro";
+import Placeholder from "../ui/placeholder.astro";
+import Ordinal from "../ui/ordinal.astro";
+import TextLink from "../ui/textLink.astro";
+
+const pillars = [
+  {
+    title: "We flag problems instead of modeling around them",
+    body: "When a duct won't clear structure, or a vent run doesn't meet the California Plumbing Code, you hear about it. The alternative is modeling around it quietly, and that problem resurfaces later at a much higher price.",
+    figure: "Issue list delivered with the model",
+    lead: true,
+  },
+  {
+    title: "We've been doing these two systems since Revit was new",
+    body: "Two owners, more than 25 years each in HVAC and plumbing engineering, and early adopters of Revit. We don't also do structural, electrical, scan-to-BIM or 4D scheduling. This is the whole business.",
+    figure: "HVAC and plumbing, modeled together",
+  },
+  {
+    title: "The model is built for whoever opens it next",
+    body: "National CAD standards. Worksets that make sense, families named consistently, view templates set up, browser organization you can navigate. Technically correct and miserable to work in is still a failure.",
+    figure: "Browser organization and view templates",
+  },
+  {
+    title: "You'll know who's working on your project",
+    body: "Two owners with more than 25 years each, and a vetted team in Los Angeles. An owner reviews every model before it leaves. Our production staff are US-based and live here, so you're talking to the people doing the work.",
+    figure: "Owner review before delivery",
+  },
+];
+---
+
+<Section id="why">
+  <SectionHeading
+    eyebrow="Why DQS"
+    intro="We'd rather you ask these of everyone, including us."
+  >
+    Four reasons we do things differently
+  </SectionHeading>
+
+  <div class="mt-14">
+    {
+      pillars.map((pillar, i) => (
+        <div class="border-border/70 grid items-center gap-9 border-t py-12 lg:grid-cols-2 lg:gap-16 lg:py-16">
+          <div class:list={[i % 2 === 1 && "lg:order-2"]}>
+            <Ordinal index={i} />
+            <h3
+              class:list={[
+                "mt-5 font-serif tracking-[-0.01em]",
+                pillar.lead
+                  ? "text-[clamp(1.7rem,2.6vw,2.4rem)] leading-[1.12]"
+                  : "text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.15]",
+              ]}
+            >
+              {pillar.title}
+            </h3>
+            <p
+              class:list={[
+                "mt-5 max-w-xl leading-8",
+                pillar.lead
+                  ? "text-foreground text-[16px]"
+                  : "text-muted-foreground text-[15px]",
+              ]}
+            >
+              {pillar.body}
+            </p>
+          </div>
+
+          <Placeholder
+            label={`Fig. ${String(i + 1).padStart(2, "0")}`}
+            note={pillar.figure}
+            class:list={[
+              "border-border/70 w-full border",
+              pillar.lead ? "h-72 lg:h-[26rem]" : "h-60 lg:h-[20rem]",
+            ]}
+          />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="border-border/70 border-t pt-12">
+    <TextLink href={site.cta.secondaryHref}>See what we check</TextLink>
+  </div>
+</Section>

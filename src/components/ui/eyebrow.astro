@@ -1,0 +1,28 @@
+---
+/**
+ * Eyebrow: a hairline rule and a small mono label in caps.
+ *
+ * The one recurring ornament on the page. It carries no claims, only the name
+ * of the section, so it can be added anywhere without touching approved copy.
+ */
+interface Props {
+  center?: boolean;
+  class?: string;
+}
+
+const { center = false, class: className = "" } = Astro.props;
+---
+
+<div
+  class:list={[
+    "flex items-center gap-4",
+    center && "justify-center",
+    className,
+  ]}
+>
+  <span class="bg-accent h-px w-10"></span>
+  <span class="text-accent font-mono text-[9px] tracking-[0.3em] uppercase">
+    <slot />
+  </span>
+  {center && <span class="bg-accent h-px w-10" />}
+</div>

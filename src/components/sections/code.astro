@@ -1,0 +1,112 @@
+---
+/**
+ * Code and Jurisdiction — copy doc §9.
+ *
+ * The empty ground: competitors.md found no competitor naming Title 24, the
+ * California Mechanical Code, the California Plumbing Code or LADBS plan
+ * check. This is the most defensible section on the page, which is why it gets
+ * one of the three dark bands.
+ *
+ * The section headline is the reserved tagline. It appears nowhere else.
+ *
+ * TODO [VERIFY] — the "what it covers for us" column was written from general
+ * knowledge. It is the most scrutinised table on the page and a plan checker
+ * or engineer will read it. An owner must confirm every line before launch.
+ */
+import Section from "../layout/section.astro";
+import SectionHeading from "../ui/sectionHeading.astro";
+import BulletList from "../ui/bulletList.astro";
+import MetaLabel from "../ui/metaLabel.astro";
+import TextLink from "../ui/textLink.astro";
+
+const codes = [
+  {
+    code: "Title 24",
+    covers: "Ventilation rates, equipment efficiency, duct insulation",
+  },
+  {
+    code: "California Mechanical Code",
+    covers: "Ductwork, equipment, combustion air, exhaust",
+  },
+  {
+    code: "California Plumbing Code",
+    covers: "Fixture units, venting, slope, clearances",
+  },
+  {
+    code: "LADBS standard corrections",
+    covers:
+      "The correction lists the department publishes, checked before you submit",
+    /* user-voice.md §10 rates this a high-trust primary source. Linking to the
+       government page DQS checks against is a credibility signal. */
+    href: "https://dbs.lacity.gov/forms-publications/publications/standard-corrections-list",
+  },
+];
+
+const flags = [
+  "Routing conflicts with structure and architecture",
+  "Clearances around equipment, for both code and service",
+  "Accessibility requirements at fixtures",
+  "Ventilation and exhaust paths that don't work as drawn",
+  "Equipment access and replacement routes",
+  "Anything that will read as a correction when it reaches plan check",
+];
+---
+
+<Section id="code" tone="dark">
+  <SectionHeading
+    eyebrow="Code Checks"
+    intro="Plan check corrections are predictable. LADBS publishes the list. We check against it while we're modeling, not after you've submitted."
+  >
+    We find it before the city does.
+  </SectionHeading>
+
+  <div class="mt-14 grid gap-12 lg:grid-cols-2 lg:gap-16">
+    <div>
+      <MetaLabel>What we check against</MetaLabel>
+
+      <dl class="border-border/70 mt-6 border-t">
+        {
+          codes.map((item) => (
+            <div class="border-border/70 border-b py-5">
+              <dt class="font-serif text-[18px] tracking-[-0.01em]">
+                {item.href ? (
+                  <TextLink href={item.href} variant="inline" external>
+                    {item.code}
+                  </TextLink>
+                ) : (
+                  item.code
+                )}
+              </dt>
+              <dd class="text-muted-foreground mt-2 text-[14px] leading-7">
+                {item.covers}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div>
+      <MetaLabel>What we flag while we model</MetaLabel>
+      <BulletList items={flags} class="mt-8" />
+    </div>
+  </div>
+
+  <p class="text-muted-foreground mt-12 max-w-2xl text-[15px] leading-8">
+    Los Angeles County is our home ground. We work across Southern California,
+    and we learn the jurisdiction before we start.
+  </p>
+
+  {/* Looks like a disclaimer, is actually the most trust-building paragraph on
+      the page. An engineer of record reads this page scanning for whether DQS
+      understands its lane. Branding.md: "DQS models. The engineer stamps.
+      Never blur this." */}
+  <div class="border-border bg-card mt-12 border p-7 lg:p-10">
+    <p class="max-w-3xl text-[15px] leading-8">
+      To be clear about what this is. We model and we flag. Your engineer of
+      record reviews, resolves and stamps. We don't certify anything, and we
+      can't promise you a permit. What we can do is make sure the obvious
+      corrections aren't in there when you submit.
+    </p>
+  </div>
+</Section>

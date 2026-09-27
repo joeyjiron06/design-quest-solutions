@@ -1,0 +1,35 @@
+---
+/**
+ * A list marked with a short accent hairline instead of a bullet glyph.
+ *
+ * The design has no icons and no discs anywhere (see the credentials strip
+ * rationale), so the rule is the marker.
+ */
+interface Props {
+  items: readonly string[];
+  /** `tight` for dense technical lists, `loose` for prose-length items. */
+  spacing?: "tight" | "loose";
+  class?: string;
+}
+
+const { items, spacing = "tight", class: className = "" } = Astro.props;
+
+const spacings = {
+  tight: "space-y-3.5",
+  loose: "space-y-5",
+};
+---
+
+<ul class:list={[spacings[spacing], className]}>
+  {
+    items.map((item) => (
+      <li class="text-muted-foreground relative pl-5 text-[14px] leading-7">
+        <span
+          class="bg-accent absolute top-[13px] left-0 h-px w-2.5"
+          aria-hidden="true"
+        />
+        {item}
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,120 @@
+---
+/**
+ * The Problem — copy doc §4.
+ *
+ * Section cut: four stations along a datum. Each column hangs off its own
+ * datum rule, and the station tick sits on the column's left edge rather than
+ * its centre, so it lines up exactly with the text beneath it (DESIGN.md §6,
+ * "a misaligned edge reads as incompetence").
+ *
+ * Paper tone, not card. Credentials (card) sits above and How It Works (card)
+ * sits below, so card here would give three card bands in a row and kill the
+ * alternation DESIGN.md §2 asks for.
+ *
+ * This section sells nothing. Its job is to make the reader think "these
+ * people have seen my last project". No numbers anywhere: Branding.md §6 bans
+ * unbacked figures and a GC spots an invented statistic immediately. The same
+ * ban rules out invented drawing metadata, so there is no sheet number, no
+ * revision letter and no date.
+ *
+ * The four detail tiles are placeholders. When the artwork exists they should
+ * show, in order: a markup pass over a delivered model, a pipe run through
+ * structural framing, one redline round of several, and a sheet check.
+ */
+import Section from "../layout/section.astro";
+import SectionHeading from "../ui/sectionHeading.astro";
+import MetaLabel from "../ui/metaLabel.astro";
+import DetailTile from "../ui/detailTile.astro";
+import ClosingLine from "../ui/closingLine.astro";
+
+const blocks = [
+  {
+    tag: "Rework",
+    title: "Your best people become the cleanup crew",
+    body: "The model comes in under budget. Then your senior engineer spends the week fixing hosting, families and dimensions instead of designing. The savings didn't disappear. They moved onto your payroll.",
+  },
+  {
+    tag: "Constructability",
+    title: "It's drawn, but it can't be built",
+    body: "Pipe running through structure. No room for a hanger. Equipment with no service access. The geometry is right and the installation is impossible.",
+  },
+  {
+    tag: "Revisions",
+    title: "The correction loop never closes",
+    body: "You send redlines. The next version fixes two of them and breaks something else. Every round costs a day, and the question that would have prevented it never got asked.",
+  },
+  {
+    tag: "Checking",
+    title: "You become the QA department",
+    body: "Nobody checked it before it reached you. So you check it, every system, every sheet. And you're still the one who finds the problem in the field.",
+  },
+];
+
+/**
+ * 0-based index to the 01, 02, 03 form used across the page. Named `pad`
+ * rather than `ordinal` so it is not mistaken for ui/ordinal.astro, which
+ * renders the same number as a large serif numeral. This section wants the
+ * small mono form instead.
+ */
+const pad = (index: number) => String(index + 1).padStart(2, "0");
+---
+
+<Section id="problem">
+  <SectionHeading
+    align="center"
+    eyebrow="The Problem"
+    intro="Most of the teams we talk to have been through at least one of these."
+  >
+    Where outsourced models go wrong
+  </SectionHeading>
+
+  {/* Four columns only from `lg`. At `md` a quarter of the measure puts the
+      body copy down to about four words a line, which reads as cramped rather
+      than spacious (DESIGN.md §6). */}
+  <div
+    class="mt-16 grid gap-y-14 md:grid-cols-2 md:gap-x-10 lg:mt-20 lg:grid-cols-4"
+  >
+    {
+      blocks.map((block, i) => (
+        <article class="border-border relative border-t pt-9">
+          {/* Station tick. Hangs off the datum at the column's left edge. */}
+          <span
+            class="bg-accent absolute top-0 left-0 h-3.5 w-px"
+            aria-hidden="true"
+          />
+
+          <div class="flex items-baseline gap-3">
+            <span class="text-accent font-mono text-[10px] tracking-[0.24em]">
+              {pad(i)}
+            </span>
+            <MetaLabel as="p">{block.tag}</MetaLabel>
+          </div>
+
+          <DetailTile tag={`Det ${pad(i)}`} class="mt-7 h-24" />
+
+          <h3 class="mt-7 font-serif text-[21px] leading-snug tracking-[-0.01em]">
+            {block.title}
+          </h3>
+
+          <p class="text-muted-foreground mt-4 text-[15px] leading-8">
+            {block.body}
+          </p>
+        </article>
+      ))
+    }
+  </div>
+
+  {/* One-off treatment, deliberately not an atom: the page has exactly one
+      pull quote and a second would dilute it. */}
+  <figure class="border-border/70 mt-18 border-t pt-14 lg:mt-24 lg:pt-16">
+    <blockquote
+      class="text-accent mx-auto max-w-3xl text-center font-serif text-[clamp(1.6rem,2.8vw,2.4rem)] leading-[1.2] italic"
+    >
+      A cheap model is the most expensive thing you can buy.
+    </blockquote>
+  </figure>
+
+  <ClosingLine>
+    None of this is a Revit problem. It's a judgment problem.
+  </ClosingLine>
+</Section>

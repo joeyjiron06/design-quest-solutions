@@ -1,0 +1,116 @@
+---
+/**
+ * FAQ — copy doc §12.
+ *
+ * The most forwardable section on the page, so full trade vocabulary is
+ * allowed. The order is deliberate: objections first so a sceptic hits their
+ * doubt immediately, then boundaries, then practical.
+ *
+ * Two answers deliberately send people away. That is the point, not an
+ * oversight: DQS loses on sticker price and should let those go.
+ */
+import Section from "../layout/section.astro";
+import SectionHeading from "../ui/sectionHeading.astro";
+import MetaLabel from "../ui/metaLabel.astro";
+import Disclosure from "../ui/disclosure.astro";
+
+const groups = [
+  {
+    label: "Objections",
+    questions: [
+      {
+        q: "Why are you more expensive than an offshore team?",
+        a: "We're not competing on hourly rate, and we'll lose that comparison every time. Compare the total instead. A model that needs a senior engineer to spend a week fixing hosting and families costs more than a clean one — that cost just lands on your payroll instead of your invoice. If hourly rate is the deciding factor, we're probably not the right fit.",
+      },
+      {
+        q: "Can you handle our volume?",
+        a: "We run up to five projects at once with a vetted team in Los Angeles. An owner reviews every model before it leaves, so quality doesn't change depending on who got assigned. If your volume is higher than that, tell us early and we'll be straight with you about what we can take.",
+      },
+      {
+        q: "How do I know your quality is real?",
+        a: "Ask us to walk you through how we'd set up your model — worksets, family naming, view templates, browser organization. You'll know quickly whether we know what we're doing. We'd also rather answer your engineer's technical questions directly than send you a brochure.",
+      },
+      {
+        q: "We already have a vendor.",
+        a: "Then the only question worth asking is how many hours your team spent fixing the last model you received. If the answer is zero, stay where you are.",
+      },
+    ],
+  },
+  {
+    label: "Scope and boundaries",
+    questions: [
+      {
+        q: "What disciplines do you model?",
+        a: "HVAC and plumbing, commercial buildings. That's it. No architectural, no structural, no electrical.",
+      },
+      {
+        q: "Do you do scan-to-BIM or as-builts?",
+        a: "No. That's a different business, and there are firms who do it well. We model from design documents and engineer markups.",
+      },
+      {
+        q: "Do you stamp drawings?",
+        a: "No. We model and we flag issues. Your engineer of record reviews, resolves and stamps. We don't blur that line.",
+      },
+      {
+        q: "Will you work in our template?",
+        a: "Yes, always. We model to your standards, not ours. If your standards aren't written down, we use national CAD standards as the baseline.",
+      },
+    ],
+  },
+  {
+    label: "Practical",
+    questions: [
+      {
+        q: "What do you need to get started?",
+        a: "Your engineer's markups, your Revit template and standards, and the project scope. If you don't have a template yet, we'll talk through what makes sense.",
+      },
+      {
+        q: "How fast can you turn a model around?",
+        a: "It depends on scope, so we won't quote you a number on a website. Send us the markups and we'll give you a date along with the price — and we'll tell you if we can't hit yours.",
+      },
+      {
+        q: "Where do you work?",
+        a: "Los Angeles County is our specialty. We know the local code and what LADBS sends back. We've also delivered work across Southern California.",
+      },
+      {
+        q: "How big is your team?",
+        a: "Two owners with more than 25 years each in HVAC and plumbing engineering, plus a small vetted production team in Los Angeles. Design Quest Solutions is a woman-owned business. We're small on purpose — it's how an owner can still review every model before it goes out.",
+      },
+    ],
+  },
+];
+---
+
+<Section id="faq" tone="card">
+  <div class="grid gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-20">
+    <SectionHeading eyebrow="FAQ" class="lg:sticky lg:top-28 lg:self-start">
+      Questions people ask before hiring us
+    </SectionHeading>
+
+    <div class="space-y-12">
+      {
+        groups.map((group) => (
+          <div>
+            <MetaLabel as="h3" class="border-border/70 border-b pb-4">
+              {group.label}
+            </MetaLabel>
+
+            {group.questions.map((item) => (
+              <Disclosure
+                title={item.q}
+                titleAs="h4"
+                titleClass="font-serif text-[18px] leading-snug tracking-[-0.01em] lg:text-[20px]"
+                class="border-border/70 border-b"
+                panelClass="max-w-2xl"
+              >
+                <p class="text-muted-foreground text-[15px] leading-8">
+                  {item.a}
+                </p>
+              </Disclosure>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Section>

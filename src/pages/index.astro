@@ -3,17 +3,40 @@
  * Landing page. This file is the table of contents: it should stay readable
  * against docs/plans/landing-page-copy.md at a glance.
  *
- * Still to build: §3 Credentials, §4 The Problem, §5 How It Works,
- * §6 Benefits, §7 Why DQS, §8 What Is In The Model, §9 Code and Jurisdiction,
- * §10 Switching Vendors, §12 FAQ, §13 Final CTA, §14 Footer.
+ * Section numbers refer to docs/plans/landing-page-copy.md. §11 About the
+ * Owners was cut by decision, so there is no gap between §10 and §12.
  */
 import BaseLayout from "../layouts/baseLayout.astro";
+import SiteHeader from "../components/layout/siteHeader.astro";
 import Hero from "../components/sections/hero.astro";
+import Credentials from "../components/sections/credentials.astro";
+import Problem from "../components/sections/problem.astro";
+import HowItWorks from "../components/sections/howItWorks.astro";
+import Benefits from "../components/sections/benefits.astro";
+import WhyDqs from "../components/sections/whyDqs.astro";
+import Model from "../components/sections/model.astro";
+import Code from "../components/sections/code.astro";
+import Switching from "../components/sections/switching.astro";
+import Faq from "../components/sections/faq.astro";
+import FinalCta from "../components/sections/finalCta.astro";
+import Footer from "../components/layout/footer.astro";
 ---
 
 <BaseLayout
   title="HVAC & Plumbing Revit Modeling | Design Quest Solutions"
   description="We turn your engineer's markups into coordinated HVAC and plumbing Revit models, and flag the code and clash problems before they reach plan check."
 >
+  <SiteHeader />
   <Hero />
+  <Credentials />
+  <Problem />
+  <HowItWorks />
+  <Benefits />
+  <WhyDqs />
+  <Model />
+  <Code />
+  <Switching />
+  <Faq />
+  <FinalCta />
+  <Footer />
 </BaseLayout>

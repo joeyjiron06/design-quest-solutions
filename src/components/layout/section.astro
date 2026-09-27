@@ -1,0 +1,95 @@
+---
+/**
+ * Section shell. Every band below the hero uses this so the page keeps one
+ * vertical rhythm and one measure.
+ *
+ * `tone` is the only way a section may change colour. It maps to theme tokens,
+ * never to raw colours (AGENTS.md).
+ *
+ * `scroll-mt` is not decoration: the sticky header would otherwise sit on top
+ * of an anchored heading when a nav link is followed.
+ *
+ * The optional `backdrop` slot renders behind the content and bleeds to the
+ * full width of the band, which the inner measure cannot do. It exists for
+ * drafting grids and gradient washes; it is decoration only, so it is inert
+ * and hidden from assistive technology.
+ *
+ * A backdrop band clips itself, so a pattern that overruns cannot widen the
+ * page. Set `clip={false}` when something inside needs `position: sticky` —
+ * an `overflow: hidden` ancestor kills sticky silently, with no warning and
+ * no visual clue as to why.
+ */
+interface Props {
+  /** Anchor id. Must be unique on the page. */
+  id?: string;
+  /** The footer reuses this shell for its measure and padding. */
+  as?: "section" | "footer";
+  tone?: "paper" | "card" | "dark";
+  width?: "default" | "narrow";
+  /** Drop the vertical padding when the section manages its own. */
+  flush?: boolean;
+  /** Only read when there is a backdrop. See the note above before changing. */
+  clip?: boolean;
+  /** Accessible name, for sections that deliberately have no heading. */
+  label?: string;
+  class?: string;
+  innerClass?: string;
+}
+
+const {
+  id,
+  as: Tag = "section",
+  tone = "paper",
+  width = "default",
+  flush = false,
+  clip = true,
+  label,
+  class: className = "",
+  innerClass = "",
+} = Astro.props;
+
+const hasBackdrop = Astro.slots.has("backdrop");
+
+const tones = {
+  paper: "bg-background",
+  card: "bg-card",
+  /* `dark` flips the custom properties for this subtree (global.css). */
+  dark: "dark bg-background text-foreground",
+};
+
+const widths = {
+  default: "max-w-[84rem]",
+  narrow: "max-w-3xl",
+};
+---
+
+<Tag
+  id={id}
+  aria-label={label}
+  class:list={[
+    "scroll-mt-24",
+    tones[tone],
+    hasBackdrop && (clip ? "relative isolate overflow-hidden" : "relative isolate"),
+    className,
+  ]}
+>
+  {
+    hasBackdrop && (
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <slot name="backdrop" />
+      </div>
+    )
+  }
+
+  <div
+    class:list={[
+      "mx-auto w-full px-5 lg:px-10",
+      widths[width],
+      !flush && "py-20 lg:py-28",
+      hasBackdrop && "relative",
+      innerClass,
+    ]}
+  >
+    <slot />
+  </div>
+</Tag>

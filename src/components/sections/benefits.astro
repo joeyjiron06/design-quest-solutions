@@ -1,0 +1,199 @@
+---
+/**
+ * Benefits — copy doc §6.
+ *
+ * Outcome as the headline, the practice that produces it underneath. That
+ * hierarchy is the only thing keeping this from being a second feature list,
+ * so the two type sizes matter more here than anywhere else on the page.
+ *
+ * No quantified benefits: no hours saved, no RFI reduction, no percentages
+ * (Branding.md §6).
+ *
+ * The heading and the drawing hold the left column and stay put while the four
+ * outcomes scroll past them, so the band reads as one argument being
+ * illustrated rather than four items in a grid.
+ *
+ * WHY THE BACKDROP IS UNCLIPPED. Section's `backdrop` slot normally makes the
+ * band `overflow-hidden`, and an `overflow-hidden` ancestor silently kills
+ * `position: sticky` in the left column — no warning, nothing to see, the
+ * column just stops sticking. `clip={false}` keeps the wash and the sticky.
+ * The wash is `inset-0`, so it has nothing to overrun anyway.
+ *
+ * `lg:items-start` is load-bearing for the same reason: a stretched grid item
+ * is as tall as its row, which leaves sticky nothing to travel through.
+ *
+ * TODO — the left column holds a labelled placeholder. When the artwork
+ * exists it replaces `Placeholder` and nothing else moves.
+ */
+import Section from "../layout/section.astro";
+import SectionHeading from "../ui/sectionHeading.astro";
+import MetaLabel from "../ui/metaLabel.astro";
+import Placeholder from "../ui/placeholder.astro";
+
+/**
+ * `tag` is a mono keyword for the keynote line, not a claim. It names the
+ * block the way a drawing note is named.
+ */
+const benefits = [
+  {
+    outcome: "Problems cost you less, because you see them sooner",
+    mechanism:
+      "We check code and clashes while we model, not after. You get an issue list with the delivery, so the expensive version of the problem never happens.",
+    tag: "Detection",
+    /* Pillar 1. The copy doc gives this block the most weight. */
+    lead: true,
+  },
+  {
+    outcome: "Your senior staff go back to designing",
+    mechanism:
+      "An owner reviews every model before it leaves. The checking happens on our time, not on your payroll.",
+    tag: "Review",
+  },
+  {
+    outcome: "The next discipline can pick it up and run",
+    mechanism:
+      "National CAD standards, clean worksets, consistent family naming, view templates and browser organization. Nobody has to reverse-engineer how it was built.",
+    tag: "Handoff",
+  },
+  {
+    outcome: "Capacity without adding payroll",
+    mechanism:
+      "A small vetted team in Los Angeles. The same people on your projects every time, in your time zone, learning your standards as they go.",
+    tag: "Capacity",
+  },
+];
+
+const pad = (index: number) => String(index + 1).padStart(2, "0");
+---
+
+<Section id="benefits" tone="card" clip={false}>
+  <div slot="backdrop" class="wash absolute inset-0"></div>
+
+  <div
+    class="grid gap-14 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-20"
+  >
+    {/* `top-24` clears the sticky site header, which is roughly 56px tall. */}
+    <div class="lg:sticky lg:top-24">
+      <SectionHeading eyebrow="Benefits">
+        What changes when we build it
+      </SectionHeading>
+
+      <Placeholder
+        label="Artwork placeholder"
+        note="Isometric view — HVAC and plumbing, modeled together"
+        class="border-border/70 mt-10 h-60 w-full border lg:h-80"
+      />
+
+      <MetaLabel as="p" class="mt-6">Four outcomes</MetaLabel>
+    </div>
+
+    <ol class="border-border/70 border-t">
+      {
+        benefits.map((benefit, i) => (
+          <li
+            class:list={[
+              "panel group border-border/70 relative border-b py-10 pl-6 transition-colors duration-200 ease-out lg:py-12 lg:pl-8",
+              benefit.lead && "lead",
+            ]}
+          >
+            {/* Keynote rule in the margin. It grows on hover by transform, so
+                nothing in the row is laid out twice (DESIGN.md §4). */}
+            <span
+              class:list={[
+                "keyline absolute top-10 left-0 h-px w-5 origin-left transition-transform duration-200 ease-out group-hover:scale-x-[2.2] lg:top-12",
+                benefit.lead ? "bg-accent" : "bg-border",
+              ]}
+              aria-hidden="true"
+            />
+
+            <div class="flex items-baseline gap-4">
+              <span
+                class:list={[
+                  "font-mono text-[11px] tracking-[0.18em]",
+                  benefit.lead ? "text-accent" : "text-muted-foreground",
+                ]}
+              >
+                {pad(i)}
+              </span>
+              <span class="text-muted-foreground font-mono text-[9px] tracking-[0.28em] uppercase">
+                {benefit.tag}
+              </span>
+            </div>
+
+            <h3
+              class:list={[
+                "mt-5 max-w-lg font-serif tracking-[-0.01em]",
+                benefit.lead
+                  ? "text-[clamp(1.5rem,2.3vw,2.1rem)] leading-[1.12]"
+                  : "text-[clamp(1.35rem,1.9vw,1.75rem)] leading-[1.15]",
+              ]}
+            >
+              {benefit.outcome}
+            </h3>
+
+            <p
+              class:list={[
+                "mt-4 max-w-xl text-[15px] leading-8 transition-colors duration-200 ease-out",
+                benefit.lead
+                  ? "text-foreground"
+                  : "text-muted-foreground group-hover:text-foreground",
+              ]}
+            >
+              {benefit.mechanism}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Section>
+
+<style>
+  /* Custom CSS is warranted: washes have no Tailwind utility. Mixed from
+     theme tokens only (DESIGN.md §7). */
+
+  /* Paper at the top edge settling into the card tone, plus a brass glow
+     behind the drawing in the left column. Both stay under 10%, so the
+     light palette's 5.7:1 on muted copy holds. */
+  .wash {
+    background-image:
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--background) 92%, transparent),
+        transparent 30%
+      ),
+      radial-gradient(
+        30rem 26rem at 8% 42%,
+        color-mix(in oklch, var(--accent) 9%, transparent),
+        transparent 68%
+      );
+  }
+
+  /* Each row is lit from its left edge, which is also where the keynote rule
+     is, so the two read as one gesture. */
+  .panel {
+    background-image: linear-gradient(
+      to right,
+      color-mix(in oklch, var(--background) 55%, transparent),
+      transparent 58%
+    );
+  }
+
+  .panel.lead {
+    background-image: linear-gradient(
+      to right,
+      color-mix(in oklch, var(--accent) 10%, transparent),
+      transparent 62%
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .keyline {
+      transition: none;
+    }
+
+    .group:hover .keyline {
+      transform: none;
+    }
+  }
+</style>

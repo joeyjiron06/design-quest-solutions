@@ -1,0 +1,56 @@
+---
+/**
+ * Section heading: eyebrow, H2 and the optional intro line.
+ *
+ * The H2 comes from the default slot rather than a prop so a headline can
+ * italicise part of itself, the way the hero H1 does.
+ */
+import Eyebrow from "./eyebrow.astro";
+
+interface Props {
+  eyebrow?: string;
+  /** Intro line beneath the headline. Plain sentence, no markup. */
+  intro?: string;
+  align?: "left" | "center";
+  class?: string;
+  titleClass?: string;
+}
+
+const {
+  eyebrow,
+  intro,
+  align = "left",
+  class: className = "",
+  titleClass = "",
+} = Astro.props;
+
+const centered = align === "center";
+---
+
+<header class:list={[centered && "text-center", className]}>
+  {eyebrow && <Eyebrow center={centered}>{eyebrow}</Eyebrow>}
+
+  <h2
+    class:list={[
+      "font-serif text-[clamp(2rem,3.4vw,3.25rem)] leading-[1.04] tracking-[-0.015em]",
+      eyebrow ? "mt-8" : "",
+      centered ? "mx-auto max-w-4xl" : "max-w-3xl",
+      titleClass,
+    ]}
+  >
+    <slot />
+  </h2>
+
+  {
+    intro && (
+      <p
+        class:list={[
+          "text-muted-foreground mt-6 text-[15px] leading-8",
+          centered ? "mx-auto max-w-2xl" : "max-w-xl",
+        ]}
+      >
+        {intro}
+      </p>
+    )
+  }
+</header>

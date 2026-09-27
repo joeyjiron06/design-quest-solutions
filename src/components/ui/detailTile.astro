@@ -1,0 +1,63 @@
+---
+/**
+ * Tiny stand-in for a detail view that does not exist yet. The small sibling
+ * of placeholder.astro: same idea, sized for a column rather than a half page.
+ *
+ * Drawn as an empty drawing viewport — faint grid, centre crosshair — rather
+ * than placeholder.astro's hatch, because at this size a 45-degree hatch turns
+ * into a grey block.
+ *
+ * The tag sits above the frame rather than inside it, the way a view title is
+ * written under a detail. That also keeps it legible on both the paper and
+ * card tones without a chip colour that would only match one.
+ */
+interface Props {
+  /** View tag, e.g. "Det 01". */
+  tag: string;
+  /** Sizing comes from the caller; the frame fills whatever is left. */
+  class?: string;
+}
+
+const { tag, class: className = "" } = Astro.props;
+---
+
+<figure class:list={["flex min-h-0 flex-col", className]}>
+  <figcaption
+    class="text-muted-foreground font-mono text-[9px] tracking-[0.24em] uppercase"
+  >
+    {tag}
+  </figcaption>
+
+  <div
+    class="border-border/70 tile relative mt-2 min-h-12 flex-1 border"
+    aria-hidden="true"
+  >
+    <span
+      class="bg-border/80 absolute top-1/2 left-1/2 h-px w-3 -translate-x-1/2"
+    ></span>
+    <span
+      class="bg-border/80 absolute top-1/2 left-1/2 h-3 w-px -translate-y-1/2"
+    ></span>
+  </div>
+</figure>
+
+<style>
+  /* Custom CSS is warranted: a drafting grid has no Tailwind utility. It reads
+     off the active palette, so it is correct in the light and dark bands.
+     Same technique as placeholder.astro. */
+  .tile {
+    background-color: color-mix(in oklch, var(--muted) 45%, transparent);
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in oklch, var(--foreground) 8%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--foreground) 8%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 12px 12px;
+  }
+</style>

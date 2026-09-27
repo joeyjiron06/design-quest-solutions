@@ -1,0 +1,30 @@
+---
+/**
+ * A grid whose cells are separated by hairlines rather than gaps.
+ *
+ * The rules are the 1px gaps with the container colour showing through, so
+ * they stay correct at every breakpoint without any nth-child arithmetic.
+ * Radius 0, no shadows, no card fills beyond the section tone — the house
+ * style is hairline grids, not floating cards.
+ *
+ * `tone` sets the cell fill, which has to match the surrounding section or the
+ * rules read as boxes.
+ */
+interface Props {
+  tone?: "paper" | "card";
+  class?: string;
+}
+
+const { tone = "paper", class: className = "" } = Astro.props;
+
+const cellFill = {
+  /* `bg-background` resolves to oxblood inside a `.dark` section, so this
+     value is correct for dark bands too. */
+  paper: "[&>*]:bg-background",
+  card: "[&>*]:bg-card",
+};
+---
+
+<div class:list={["bg-border/60 grid gap-px", cellFill[tone], className]}>
+  <slot />
+</div>

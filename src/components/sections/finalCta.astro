@@ -1,0 +1,55 @@
+---
+/**
+ * Final CTA — copy doc §13.
+ *
+ * There is no form, so the copy has to do the form's job. The intake prompt is
+ * the form: four things the reader already knows, which is what stops inbound
+ * mail being "how much for a Revit model?" and a week of back-and-forth.
+ *
+ * The plain-text address is not redundant with the button. A reader on a work
+ * machine with no mail client configured gets nothing from a mailto:, and
+ * needs an address they can copy into webmail.
+ */
+import { site } from "../../data/site";
+import Section from "../layout/section.astro";
+import SectionHeading from "../ui/sectionHeading.astro";
+import MetaLabel from "../ui/metaLabel.astro";
+import BulletList from "../ui/bulletList.astro";
+import Button from "../ui/button.astro";
+import EmailAddress from "../ui/emailAddress.astro";
+
+const intake = [
+  "Project type and size",
+  "Where the design stands right now",
+  "Your Revit version and template, if you have one",
+  "When you need to submit",
+];
+---
+
+<Section id="contact" tone="dark" width="narrow">
+  <SectionHeading
+    align="center"
+    eyebrow="Get Started"
+    intro="Problems found now cost a conversation. Found later, they cost a change order."
+  >
+    Send us the markups
+  </SectionHeading>
+
+  <div class="border-border mt-14 border p-7 text-left lg:p-10">
+    <MetaLabel>Tell us what you've got</MetaLabel>
+    <BulletList items={intake} class="mt-6" />
+  </div>
+
+  <div class="mt-12 flex flex-col items-center gap-6">
+    <Button href={site.quoteHref}>{site.cta.primary}</Button>
+
+    <p class="text-muted-foreground text-[13px]">
+      Or email us directly: <EmailAddress link class="text-foreground" />
+    </p>
+  </div>
+
+  <p class="text-muted-foreground mt-12 text-center text-[15px] leading-8">
+    We'll come back with a scope, a price and a date. If it's not a fit, we'll
+    tell you that too.
+  </p>
+</Section>

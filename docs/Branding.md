@@ -3,7 +3,8 @@
 **Purpose:** define how Design Quest Solutions (DQS) presents itself in words, so that everyone
 writing for the company says the same thing.
 
-**Status:** approved 2026-09-23. Verbal brand only.
+**Status:** approved 2026-09-23. Verbal brand only. Visual identity lives in
+[`DESIGN.md`](../DESIGN.md).
 
 **Built from:** [`docs/About.md`](./About.md),
 [`docs/marketing/user-voice.md`](./marketing/user-voice.md),
@@ -17,8 +18,9 @@ Position, pillars, voice, vocabulary, messaging by audience, and the claims you 
 
 - **Page sections, headlines and page inventory.** Those belong to `landing-page-copy.md`,
   the next step in [`docs/plans/landing-page-plan.md`](./plans/landing-page-plan.md).
-- **Visual identity.** Colours, typography, logo and imagery are a separate decision.
-  The theme in [`src/global.css`](../src/global.css) has not been reviewed against this brand.
+- **Visual identity.** Colours, typography, motion, imagery and layout belong to
+  [`DESIGN.md`](../DESIGN.md), which is built on the theme in
+  [`src/global.css`](../src/global.css). Read both before building UI.
 
 ---
 
@@ -150,6 +152,10 @@ this market, so DQS wins on what it knows, not on where it sits.
 **On being woman-owned:** supporting cast, never the headline. It belongs in the About section
 and in credentials. It matters as a tiebreaker on public work with participation goals. Led with,
 it starts a credentials comparison DQS currently loses.
+
+In *visual* identity it does more work: the maroon and brass palette carries it without saying it.
+See [`DESIGN.md`](../DESIGN.md) §1. That is a deliberate split — the palette signals it, the copy
+does not lead with it.
 
 ---
 
@@ -351,4 +357,4 @@ These were unresolved when this document was approved.
 - No proof assets exist yet, and no date is set for gathering them.
 - Revenue mix across design-build, referral and direct work is not documented.
 - Subcontractor arrangements are not written down as a process, which Pillar 4 depends on.
-- Visual identity has not been reviewed against this brand.
+- Logo. [`DESIGN.md`](../DESIGN.md) covers palette, type, motion and imagery, but no logo exists yet.

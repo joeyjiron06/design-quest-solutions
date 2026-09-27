@@ -1,0 +1,40 @@
+---
+/**
+ * Switching Vendors — copy doc §10.
+ *
+ * Aimed at the switching moment. "Stay where you are" is the strongest move on
+ * the page: a firm confident enough to send you away is believed about
+ * everything above it, and a happy buyer was never converting anyway.
+ *
+ * Nothing here needs evidence. No numbers, no testimonials, no claims.
+ */
+import { site } from "../../data/site";
+import Section from "../layout/section.astro";
+import SectionHeading from "../ui/sectionHeading.astro";
+import Button from "../ui/button.astro";
+---
+
+<Section id="switching" width="narrow">
+  <SectionHeading align="center" eyebrow="Switching Vendors">
+    How many hours did your team spend fixing the last model you received?
+  </SectionHeading>
+
+  <div class="mt-10 space-y-6 text-center text-[15px] leading-8">
+    <p>If the answer is zero, stay where you are. We mean that.</p>
+
+    <p class="text-muted-foreground">
+      If you had to count, here's what's different on our end. The same people
+      on every one of your projects. Questions answered in your time zone.
+      Problems flagged in an issue list instead of buried in the geometry.
+    </p>
+
+    <p class="text-muted-foreground">
+      We can pick up from a model you already have, or start from the markups.
+      Either works.
+    </p>
+  </div>
+
+  <div class="mt-12 flex justify-center">
+    <Button href={site.quoteHref}>{site.cta.primary}</Button>
+  </div>
+</Section>

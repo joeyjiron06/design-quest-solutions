@@ -1,0 +1,72 @@
+---
+/**
+ * Footer — copy doc §14.
+ *
+ * The footer nav matches the navbar exactly. "About" is gone from both, since
+ * copy doc §11 was cut.
+ *
+ * Woman-owned appears here and in the FAQ, and nowhere else: Branding.md
+ * Pillar 4 makes it supporting cast, never the headline.
+ *
+ * CAVEAT on the year. The copy doc rightly says never hardcode it, and this
+ * does not — but the site builds statically, so the year is fixed at build
+ * time. A site built in December and left untouched will be wrong in January.
+ * Rebuild on deploy, or move this to a client-side write if deploys are rare.
+ */
+import { site } from "../../data/site";
+import Section from "./section.astro";
+import MetaLabel from "../ui/metaLabel.astro";
+import EmailAddress from "../ui/emailAddress.astro";
+
+const year = new Date().getFullYear();
+---
+
+<Section as="footer" tone="dark" flush class="border-border border-t">
+  <div class="grid gap-12 py-16 md:grid-cols-3 lg:py-20">
+    <div>
+      <p class="font-serif text-[15px] tracking-[0.18em] uppercase">
+        {site.brand}
+      </p>
+      <p class="text-muted-foreground mt-6 max-w-xs text-[14px] leading-7">
+        HVAC and plumbing Revit modeling for commercial buildings.
+      </p>
+      <p class="text-muted-foreground mt-4 max-w-xs text-[14px] leading-7">
+        A woman-owned business in Los Angeles County.
+      </p>
+    </div>
+
+    <nav aria-label="Footer">
+      <MetaLabel as="h2">Navigate</MetaLabel>
+      <ul class="mt-6 space-y-3">
+        {
+          site.nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="hover:text-accent text-[14px] transition-colors"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div>
+      <MetaLabel as="h2">Contact</MetaLabel>
+      <p class="mt-6 font-mono text-[13px]">
+        <EmailAddress link />
+      </p>
+      <p class="text-muted-foreground mt-4 max-w-xs text-[14px] leading-7">
+        Los Angeles County. Serving Southern California.
+      </p>
+    </div>
+  </div>
+
+  <div class="border-border/70 border-t py-7">
+    <p class="text-muted-foreground text-[12px] tracking-[0.06em]">
+      &copy; {year} {site.brand}
+    </p>
+  </div>
+</Section>

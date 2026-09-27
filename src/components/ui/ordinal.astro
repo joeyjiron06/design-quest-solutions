@@ -1,0 +1,26 @@
+---
+/**
+ * The two-digit serif numeral used to mark a block, a step or a pillar.
+ *
+ * Takes the zero-based array index so call sites can pass the map index
+ * straight through, the same convention as card.astro.
+ */
+interface Props {
+  index: number;
+  /** Accent colour instead of muted, for the one block that leads. */
+  emphasis?: boolean;
+  class?: string;
+}
+
+const { index, emphasis = false, class: className = "" } = Astro.props;
+---
+
+<span
+  class:list={[
+    "font-serif text-[32px] leading-none",
+    emphasis ? "text-accent" : "text-muted-foreground/45",
+    className,
+  ]}
+>
+  {String(index + 1).padStart(2, "0")}
+</span>

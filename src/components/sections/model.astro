@@ -1,0 +1,124 @@
+---
+/**
+ * What Is In The Model — copy doc §8.
+ *
+ * The depth changes here. Sections 1 to 7 are written for a principal; this
+ * one is written for whoever opens the file, so full trade vocabulary is
+ * correct and the density is intentional.
+ *
+ * TODO [VERIFY] — "Systems we model" and "Coordination" were written from the
+ * brand and research documents, not by a Revit MEP practitioner. An owner has
+ * to read those two lists line by line before this page goes live. A wrong or
+ * missing technical item would damage a firm whose entire pitch is meticulous
+ * work (copy doc §8, open items).
+ */
+import Section from "../layout/section.astro";
+import SectionHeading from "../ui/sectionHeading.astro";
+import HairlineGrid from "../ui/hairlineGrid.astro";
+import Disclosure from "../ui/disclosure.astro";
+import BulletList from "../ui/bulletList.astro";
+
+const groups = [
+  {
+    title: "Model structure",
+    items: [
+      "Worksets organized by system and level, not by whoever was working that day",
+      "Families named to a consistent convention, with type catalogs where they earn their keep",
+      "View templates set up so sheets stay consistent as the project grows",
+      "Browser organization you can navigate without a legend",
+      "Elements hosted properly, so a level change doesn't detonate the model",
+      "Warning counts kept down and reviewed before the model leaves",
+    ],
+  },
+  {
+    title: "Systems we model",
+    items: [
+      "Supply, return and exhaust ductwork, with equipment and terminal units",
+      "Hydronic and refrigerant piping",
+      "Domestic hot and cold water",
+      "Sanitary waste and vent",
+      "Natural gas",
+      "Real fittings and valves, not placeholder geometry",
+    ],
+  },
+  {
+    title: "Coordination",
+    items: [
+      "Clash detection run against architectural and structural",
+      "Hanger and support space accounted for, not assumed",
+      "Service clearances and maintenance access around every piece of equipment",
+      "Equipment connections modeled, not implied",
+      "Ceiling plenum coordination with the other trades",
+    ],
+  },
+  {
+    title: "Working with your team",
+    items: [
+      "We model in your template, to your standards",
+      "We follow your BIM Execution Plan, or help you scope one if there isn't one yet",
+      "LOD agreed before we start, not argued about after",
+      "An issue list delivered with every model",
+    ],
+  },
+];
+---
+
+<Section id="model" tone="card">
+  <SectionHeading
+    eyebrow="What We Model"
+    intro="This part is for whoever's going to open the file."
+  >
+    What's actually in the model
+  </SectionHeading>
+
+  <HairlineGrid tone="card" class="mt-14 md:grid-cols-2 lg:grid-cols-4">
+    {
+      groups.map((group) => (
+        <div class="md:px-7 md:py-10">
+          <Disclosure
+            title={group.title}
+            open
+            staticFrom="md"
+            titleClass="font-serif text-[19px] leading-snug tracking-[-0.01em]"
+          >
+            <BulletList items={group.items} class="md:mt-6" />
+          </Disclosure>
+        </div>
+      ))
+    }
+  </HairlineGrid>
+
+  {/* Soft close. Deliberately not a fifth "Request a Quote": the copy doc
+      fixes the button at four appearances and keeps the wording identical. */}
+  <p
+    class="text-muted-foreground mt-14 text-center font-serif text-[clamp(1.1rem,1.7vw,1.4rem)] leading-relaxed italic lg:mt-16"
+  >
+    Not sure what you need? Send the markups and we'll tell you what the scope
+    should be.
+  </p>
+</Section>
+
+<script>
+  /* The groups are plain columns from `md` up and an accordion below it.
+     They render open, so the desktop layout is correct with scripting off;
+     this collapses them on small screens where 21 bullets is a long scroll. */
+  const panels = document.querySelectorAll<HTMLDetailsElement>(
+    "details[data-static-from]",
+  );
+
+  const breakpoints = { md: 768, lg: 1024 } as const;
+
+  panels.forEach((panel) => {
+    const key = panel.dataset.staticFrom as keyof typeof breakpoints;
+    const width = breakpoints[key];
+    if (!width) return;
+
+    const query = window.matchMedia(`(min-width: ${width}px)`);
+    const sync = () => {
+      panel.open = query.matches;
+    };
+
+    sync();
+    query.addEventListener("change", sync);
+  });
+</script>

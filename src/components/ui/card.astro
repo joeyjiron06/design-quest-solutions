@@ -1,0 +1,83 @@
+---
+/**
+ * A cell inside a HairlineGrid: optional number, title, body.
+ *
+ * Shared by §4 The Problem, §5 How It Works and §6 Benefits, which are three
+ * different arguments told in the same shape.
+ *
+ * Title size is a fixed set rather than a free class, because two competing
+ * `text-*` utilities on one element resolve by CSS source order and not by the
+ * order they are written (same trap as titleBlock.astro).
+ *
+ * Horizontal padding is passed in by the caller. It has to appear at the same
+ * breakpoint the grid gains its second column, otherwise a single-column cell
+ * is indented for no reason.
+ */
+import Ordinal from "./ordinal.astro";
+
+interface Props {
+  /** Zero-based. Rendered as 01, 02, 03. Omit for an unnumbered cell. */
+  index?: number;
+  title: string;
+  size?: "sm" | "md" | "lg";
+  /** Hairline across the top of the cell, above the number. */
+  rule?: boolean;
+  /** Extra weight: accent rule, accent number, full-contrast body. */
+  emphasis?: boolean;
+  class?: string;
+}
+const {
+  index,
+  title,
+  size = "md",
+  rule = false,
+  emphasis = false,
+  class: className = "",
+} = Astro.props;
+
+const titleSizes = {
+  sm: "text-[21px] leading-snug",
+  md: "text-[23px] leading-snug",
+  lg: "max-w-md text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.15]",
+};
+
+const hasMarker = rule || index !== undefined;
+---
+
+<article class:list={["flex flex-col py-10", className]}>
+  {
+    rule && (
+      <span
+        class:list={[
+          "block h-px w-full",
+          emphasis ? "bg-accent" : "bg-border",
+        ]}
+      />
+    )
+  }
+
+  {
+    index !== undefined && (
+      <Ordinal index={index} emphasis={emphasis} class={rule ? "mt-6" : ""} />
+    )
+  }
+
+  <h3
+    class:list={[
+      "font-serif tracking-[-0.01em]",
+      titleSizes[size],
+      hasMarker && "mt-5",
+    ]}
+  >
+    {title}
+  </h3>
+
+  <div
+    class:list={[
+      "mt-4 max-w-lg text-[15px] leading-8",
+      emphasis ? "text-foreground" : "text-muted-foreground",
+    ]}
+  >
+    <slot />
+  </div>
+</article>

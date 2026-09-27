@@ -1,0 +1,63 @@
+---
+/**
+ * The email address rendered as text, assembled by script.
+ *
+ * Copy doc §13: "A plain-text address plus a raw mailto: will be harvested
+ * within weeks." The address is split across data attributes and only joined
+ * in the browser, which stops the bots that scrape text.
+ *
+ * With scripting off the reader still sees an obfuscated but readable address
+ * rather than an empty gap, which is the failure mode the copy doc warns about
+ * for the JS-assembly approach.
+ *
+ * `link` is off where the component already sits inside an anchor. Nested
+ * anchors are invalid HTML, and the copy doc says to leave the button's
+ * mailto: alone anyway — most bots read text, not href attributes.
+ */
+import { site } from "../../data/site";
+
+interface Props {
+  /** Replace the text with a real mailto: link once script runs. */
+  link?: boolean;
+  class?: string;
+}
+
+const { link = false, class: className = "" } = Astro.props;
+
+const [user, domain] = site.email.split("@");
+const masked = `${user} [at] ${domain.replaceAll(".", " dot ")}`;
+---
+
+<span
+  data-email-user={user}
+  data-email-domain={domain}
+  data-email-link={link ? "" : undefined}
+  class={className}>{masked}</span
+>
+
+<script>
+  /* Astro hoists and dedupes this, so it runs once no matter how many
+     addresses are on the page. */
+  const subject = "?subject=Project%20inquiry";
+
+  document
+    .querySelectorAll<HTMLElement>("[data-email-user][data-email-domain]")
+    .forEach((node) => {
+      const { emailUser, emailDomain } = node.dataset;
+      if (!emailUser || !emailDomain) return;
+
+      const address = `${emailUser}@${emailDomain}`;
+
+      if (node.dataset.emailLink === undefined) {
+        node.textContent = address;
+        return;
+      }
+
+      const anchor = document.createElement("a");
+      anchor.href = `mailto:${address}${subject}`;
+      anchor.textContent = address;
+      anchor.className =
+        "decoration-border hover:decoration-accent hover:text-accent underline underline-offset-4 transition-colors";
+      node.replaceChildren(anchor);
+    });
+</script>

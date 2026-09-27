@@ -1,0 +1,53 @@
+---
+/**
+ * Text link. Two shapes:
+ *
+ * - `rule` (default): a standalone call to action. Mono caps with a hairline
+ *   that extends on hover, which is the page's substitute for an arrow glyph.
+ * - `inline`: a link inside running prose, underlined on the hairline colour.
+ *
+ * `external` adds the required rel attributes and a hidden note for screen
+ * readers, because a link that opens a new tab without warning is a known
+ * accessibility failure.
+ */
+interface Props {
+  href: string;
+  variant?: "rule" | "inline";
+  external?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = "rule",
+  external = false,
+  class: className = "",
+} = Astro.props;
+
+const variants = {
+  rule: "group inline-flex items-center gap-3 font-mono text-[11px] tracking-[0.2em] uppercase",
+  inline:
+    "decoration-border hover:decoration-accent underline underline-offset-4",
+};
+
+const externalAttrs = external
+  ? { target: "_blank", rel: "noopener noreferrer" }
+  : {};
+---
+
+<a
+  href={href}
+  {...externalAttrs}
+  class:list={["hover:text-accent transition-colors", variants[variant], className]}
+>
+  <slot />
+  {external && <span class="sr-only"> (opens in a new tab)</span>}
+  {
+    variant === "rule" && (
+      <span
+        class="bg-current h-px w-8 transition-all group-hover:w-12"
+        aria-hidden="true"
+      />
+    )
+  }
+</a>

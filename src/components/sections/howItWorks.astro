@@ -1,0 +1,266 @@
+---
+/**
+ * How It Works — copy doc §5.
+ *
+ * Removes uncertainty about the engagement. Step 1 is deliberately
+ * low-friction (three things the reader already has) and step 3 carries the
+ * most visual weight, because it is the reason the firm exists.
+ *
+ * Drawn as one sheet: headline in the header strip, notes down the left
+ * margin, drawing area to their right, dimensions outside the frame. The
+ * notes lead because they are the content; the drawing is the thing being
+ * annotated. §4 The Problem sits directly above this band, so a columned
+ * layout here would read as one long section rather than two arguments.
+ *
+ * Everything inside the frame starts on one axis — eyebrow, headline, intro,
+ * the notes label and the note marks all share a left edge (DESIGN.md §6).
+ * Check that before changing any padding in here.
+ *
+ * TODO — the drawing area is a labelled placeholder. When the artwork exists
+ * it replaces `.plate`, and the rest of the frame stays put.
+ *
+ * No turnaround or response time appears anywhere. Branding.md §6 forbids it
+ * until a number is decided.
+ */
+import Section from "../layout/section.astro";
+import SectionHeading from "../ui/sectionHeading.astro";
+import MetaLabel from "../ui/metaLabel.astro";
+import ClosingLine from "../ui/closingLine.astro";
+
+const steps = [
+  {
+    title: "You send the markups",
+    body: "PDFs from your engineer, your Revit template, and the project scope. That's enough for us to quote it and get started.",
+  },
+  {
+    title: "We model it in Revit",
+    body: "HVAC and plumbing, built inside your template and your standards. Not ours.",
+  },
+  {
+    title: "We tell you what we found",
+    body: "Code conflicts, clashes, and anything that can't be installed the way it's drawn. You get an issue list with the model, not a surprise in the field.",
+    /* Pillar 1. The copy doc asks for more weight here than on the others, so
+       this is the only note that is lifted, enlarged and keynoted. */
+    lead: true,
+    /* Not new copy: this line is already approved and used in §7. */
+    remark: "Issue list delivered with the model",
+  },
+  {
+    title: "An owner reviews it",
+    body: "Every model gets reviewed by an owner before it leaves. Then your engineer takes it from there and stamps it.",
+  },
+];
+
+const pad = (index: number) => String(index + 1).padStart(2, "0");
+---
+
+<Section id="process" tone="dark">
+  <div slot="backdrop" class="plate absolute inset-0"></div>
+  <div slot="backdrop" class="plate-scrim absolute inset-0"></div>
+
+  {/* `lg:pr-14` reserves the gutter the vertical dimension lives in, so the
+      dimension never sits on top of the frame. */}
+  <div class="lg:pr-14">
+    <div class="relative">
+      {/* Positioned against the frame, so its ticks land exactly on the
+          frame's top and bottom edges. */}
+      <div
+        class="absolute inset-y-0 -right-14 hidden w-6 lg:block"
+        aria-hidden="true"
+      >
+        <span class="bg-border/70 absolute inset-y-0 left-1/2 w-px"></span>
+        <span
+          class="bg-border/70 absolute top-0 left-1/2 h-px w-4 -translate-x-1/2"
+        ></span>
+        <span
+          class="bg-border/70 absolute bottom-0 left-1/2 h-px w-4 -translate-x-1/2"
+        ></span>
+        <span
+          class="text-muted-foreground bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-1 py-3 font-mono text-[9px] tracking-[0.24em] uppercase [writing-mode:vertical-rl]"
+          >Sheet extent</span
+        >
+      </div>
+
+      <div class="border-border/70 border">
+        <header
+          class="border-border/70 bg-background/92 border-b px-6 py-10 lg:px-8 lg:py-14"
+        >
+          <SectionHeading
+            eyebrow="How It Works"
+            intro="You send what you already have. We handle the rest."
+          >
+            From markups to a model you can build from
+          </SectionHeading>
+        </header>
+
+        <div class="lg:grid lg:grid-cols-[24rem_minmax(0,1fr)]">
+          {/* Notes margin. It carries the divider, so the rule is a single
+              hairline at every breakpoint: right edge on `lg`, top edge on
+              the stacked layout below it. */}
+          <div class="border-border/70 bg-background/92 lg:border-r">
+            <div class="px-6 py-4 lg:px-8">
+              <MetaLabel as="p">Notes</MetaLabel>
+            </div>
+
+            <ol>
+              {
+                steps.map((step, i) => (
+                  <li
+                    class:list={[
+                      "border-border/60 border-t px-6 py-6 lg:px-8",
+                      step.lead && "bg-card",
+                    ]}
+                  >
+                    <div class="flex items-baseline gap-3">
+                      <span
+                        class:list={[
+                          "w-6 shrink-0 font-mono text-[10px] tracking-[0.16em]",
+                          step.lead ? "text-accent" : "text-muted-foreground",
+                        ]}
+                      >
+                        {pad(i)}
+                      </span>
+                      <h3
+                        class:list={[
+                          "font-serif tracking-[-0.01em]",
+                          step.lead
+                            ? "text-[20px] leading-snug"
+                            : "text-[17px] leading-snug",
+                        ]}
+                      >
+                        {step.title}
+                      </h3>
+                    </div>
+
+                    <p
+                      class:list={[
+                        "mt-2 pl-9 text-[13.5px] leading-6",
+                        step.lead ? "text-foreground" : "text-muted-foreground",
+                      ]}
+                    >
+                      {step.body}
+                    </p>
+
+                    {step.remark && (
+                      <div class="mt-4 flex items-center gap-3 pl-9">
+                        <span class="bg-accent h-px w-5 shrink-0" />
+                        <span class="text-accent font-mono text-[9px] tracking-[0.22em] uppercase">
+                          {step.remark}
+                        </span>
+                      </div>
+                    )}
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+
+          {/* Drawing area. Corner ticks and a caption, nothing else: this is
+              the part the artwork replaces. */}
+          <figure
+            class="border-border/70 relative min-h-64 border-t lg:min-h-[32rem] lg:border-t-0"
+          >
+            <span
+              class="border-border/80 absolute top-4 left-4 size-3 border-t border-l"
+              aria-hidden="true"></span>
+            <span
+              class="border-border/80 absolute top-4 right-4 size-3 border-t border-r"
+              aria-hidden="true"></span>
+            <span
+              class="border-border/80 absolute bottom-4 left-4 size-3 border-b border-l"
+              aria-hidden="true"></span>
+            <span
+              class="border-border/80 absolute right-4 bottom-4 size-3 border-r border-b"
+              aria-hidden="true"></span>
+
+            <figcaption class="absolute bottom-10 left-6 max-w-xs lg:left-8">
+              <span
+                class="text-muted-foreground font-mono text-[9px] tracking-[0.28em] uppercase"
+                >Artwork placeholder</span
+              >
+              <span
+                class="mt-1.5 block font-serif text-[15px] leading-snug italic"
+              >
+                Isometric view — HVAC and plumbing, modeled together
+              </span>
+              <span class="bg-border mt-3 block h-px w-28"></span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    {/* Overall dimension, outside the frame the way a real one is. */}
+    <div class="mt-5 hidden items-center lg:flex" aria-hidden="true">
+      <span class="bg-border/70 h-2.5 w-px shrink-0"></span>
+      <span class="bg-border/70 h-px flex-1"></span>
+      <span
+        class="text-muted-foreground px-3 font-mono text-[9px] tracking-[0.24em] uppercase"
+        >Markups to model</span
+      >
+      <span class="bg-border/70 h-px flex-1"></span>
+      <span class="bg-border/70 h-2.5 w-px shrink-0"></span>
+    </div>
+  </div>
+
+  {/* Liability guardrail, stated plainly. Branding.md: "DQS models. The
+      engineer stamps. Never blur this." */}
+  <ClosingLine>We model. Your engineer stamps. That line never moves.</ClosingLine>
+</Section>
+
+<style>
+  /* Custom CSS is warranted: a drafting plate has no Tailwind utility. Every
+     value is mixed from theme tokens, so the plate follows the palette instead
+     of introducing one (DESIGN.md §7, no new tokens). Same technique as
+     placeholder.astro and detailTile.astro. */
+  .plate {
+    background-image:
+      radial-gradient(
+        38rem 28rem at 66% 6%,
+        color-mix(in oklch, var(--accent) 14%, transparent),
+        transparent 68%
+      ),
+      /* major divisions */
+      linear-gradient(
+          to right,
+          color-mix(in oklch, var(--foreground) 16%, transparent) 1px,
+          transparent 1px
+        ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--foreground) 16%, transparent) 1px,
+        transparent 1px
+      ),
+      /* minor divisions */
+      linear-gradient(
+          to right,
+          color-mix(in oklch, var(--foreground) 7%, transparent) 1px,
+          transparent 1px
+        ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--foreground) 7%, transparent) 1px,
+        transparent 1px
+      );
+    background-size:
+      100% 100%,
+      160px 160px,
+      160px 160px,
+      32px 32px,
+      32px 32px;
+  }
+
+  /* The veil. Strong at the band edges, open through the middle where the
+     drawing is. The panels carry their own background, so running copy never
+     sits on the plate itself and the dark palette's contrast ratios hold
+     (global.css: body 13.1, muted 7.4). */
+  .plate-scrim {
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--background) 94%, transparent) 0%,
+      color-mix(in oklch, var(--background) 56%, transparent) 26%,
+      color-mix(in oklch, var(--background) 42%, transparent) 68%,
+      color-mix(in oklch, var(--background) 86%, transparent) 100%
+    );
+  }
+</style>

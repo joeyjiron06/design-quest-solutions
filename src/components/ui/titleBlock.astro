@@ -6,6 +6,7 @@
  * It carries the §3 credentials, so the hero needs no separate fact strip.
  */
 import { site } from "../../data/site";
+import EmailAddress from "./emailAddress.astro";
 
 interface Props {
   /**
@@ -66,7 +67,10 @@ const { width = "lg:w-[27rem]", class: className = "" } = Astro.props;
       href={site.quoteHref}
       class="hover:text-accent mt-1 block font-mono text-[12px] transition-colors"
     >
-      {site.email}
+      {/* Masked in the markup, joined by script. The hero was publishing the
+          address as plain text, which is the exact harvesting problem copy doc
+          §13 warns about. */}
+      <EmailAddress />
     </a>
   </div>
 </div>
